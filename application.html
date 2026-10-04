@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#174c78">
+    <meta name="description" content="Start an application to study at FAL-COMP Literacy Center.">
+    <title>Application Portal | FAL-COMP Literacy Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body data-page="application">
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="FAL-COMP Literacy Center home">
+            <span class="brand-mark" aria-hidden="true">F</span>
+            <span class="brand-name">FAL-COMP <small>Literacy Center</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+            <a href="index.html#about">Our center</a>
+            <details class="nav-dropdown">
+                <summary>Explore</summary>
+                <div class="nav-dropdown-menu">
+                    <a href="courses.html">Courses &amp; fees <span>↗</span></a>
+                    <a href="alumni.html">Alumni community <span>↗</span></a>
+                    <a href="index.html#student-profile">Student sign in <span>↗</span></a>
+                    <a href="alumni-login.html">Alumni sign in <span>↗</span></a>
+                    <a href="application.html" aria-current="page">Application portal <span>↗</span></a>
+                </div>
+            </details>
+            <a class="nav-cta" href="courses.html">View courses <span aria-hidden="true">↗</span></a>
+            <div class="site-controls">
+                <label class="language-control"><span class="sr-only">Choose language</span><select id="language-select" aria-label="Choose language"><option value="en">English</option><option value="sw">Kiswahili</option></select></label>
+                <label class="theme-control" for="theme-toggle"><span class="theme-icon" aria-hidden="true">◐</span><span class="theme-label">Dark mode</span><input id="theme-toggle" type="checkbox" role="switch" aria-label="Dark mode" aria-checked="false"></label>
+            </div>
+        </nav>
+    </header>
+
+    <main class="portal-main">
+        <section class="portal-content application-content" aria-labelledby="application-title">
+            <p class="eyebrow eyebrow-dark"><span></span> FAL-COMP / Application portal</p>
+            <h1 id="application-title">Start your<br><em>application.</em></h1>
+            <p class="portal-intro">Tell us how to reach you and which course you’re interested in.</p>
+            <form class="portal-form" id="application-form">
+                <label for="applicant-name">Full name</label>
+                <input id="applicant-name" name="name" autocomplete="name" required>
+                <label for="applicant-email">Email address</label>
+                <input id="applicant-email" name="email" type="email" autocomplete="email" required>
+                <label for="applicant-phone">Phone number</label>
+                <input id="applicant-phone" name="phone" type="tel" autocomplete="tel" required>
+                <label for="applicant-course">Course of interest</label>
+                <select id="applicant-course" name="course" required>
+                    <option value="" selected disabled>Select a course</option>
+                    <option>Computer basics</option>
+                    <option>Programming languages</option>
+                    <option>Graphic design</option>
+                    <option>Microsoft suite</option>
+                    <option>Digital skills</option>
+                </select>
+                <button class="button button-green" type="submit">Prepare application <span aria-hidden="true">↗</span></button>
+            </form>
+            <p class="portal-note" id="application-status" aria-live="polite">Preview only: this form does not send or store your information. Connect an application service before accepting submissions.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand brand-footer" href="index.html"><span class="brand-mark" aria-hidden="true">F</span><span class="brand-name">FAL-COMP <small>Literacy Center</small></span></a>
+        <p>Practical skills. Brighter possibilities.</p>
+        <span class="copyright">© <span id="year"></span> FAL-COMP Literacy Center</span>
+    </footer>
+</body>
+</html>

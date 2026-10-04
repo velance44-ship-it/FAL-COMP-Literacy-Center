@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#174c78">
+    <meta name="description" content="Stay connected with the FAL-COMP Literacy Center alumni community.">
+    <title>Alumni Community | FAL-COMP Literacy Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body data-page="alumni">
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="FAL-COMP Literacy Center home">
+            <span class="brand-mark" aria-hidden="true">F</span>
+            <span class="brand-name">FAL-COMP <small>Literacy Center</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+            <span></span><span></span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+            <a href="index.html#about">Our center</a>
+            <details class="nav-dropdown">
+                <summary>Explore</summary>
+                <div class="nav-dropdown-menu">
+                    <a href="courses.html">Courses &amp; fees <span>↗</span></a>
+                    <a href="alumni.html" aria-current="page">Alumni community <span>↗</span></a>
+                    <a href="index.html#student-profile">Student sign in <span>↗</span></a>
+                    <a href="alumni-login.html">Alumni sign in <span>↗</span></a>
+                    <a href="application.html">Application portal <span>↗</span></a>
+                </div>
+            </details>
+            <a class="nav-cta" href="index.html#enquire">Contact the center <span aria-hidden="true">↗</span></a>
+            <div class="site-controls">
+                <label class="language-control">
+                    <span class="sr-only">Choose language</span>
+                    <select id="language-select" aria-label="Choose language">
+                        <option value="en">English</option>
+                        <option value="sw">Kiswahili</option>
+                    </select>
+                </label>
+                <label class="theme-control" for="theme-toggle">
+                    <span class="theme-icon" aria-hidden="true">◐</span>
+                    <span class="theme-label">Dark mode</span>
+                    <input id="theme-toggle" type="checkbox" role="switch" aria-label="Dark mode" aria-checked="false">
+                </label>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="alumni-section alumni-page" id="alumni" aria-labelledby="alumni-title">
+            <div class="section-wrap alumni-wrap">
+                <div class="section-kicker">01 / Keep in touch</div>
+                <div class="alumni-grid">
+                    <div class="alumni-stamp" aria-hidden="true"><span>FAL-COMP</span><strong>ALUMNI<br>COMMUNITY</strong><span>LEARN · SHARE · GROW</span></div>
+                    <div class="alumni-copy">
+                        <p class="eyebrow eyebrow-dark"><span></span> Your learning doesn't stop here</p>
+                        <h1 id="alumni-title">The next chapter is <em>together.</em></h1>
+                        <p>Stay connected with fellow learners, share what you’re working on, and keep discovering new ways to put your skills to use. The FAL-COMP alumni community is a place to keep learning and support one another.</p>
+                        <a class="button button-green" href="index.html#enquire">Ask about the alumni community <span aria-hidden="true">↗</span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="alumni-invitation section-wrap">
+            <p class="eyebrow eyebrow-dark"><span></span> Keep growing together</p>
+            <h2>Learn. Share. <em>Grow.</em></h2>
+            <p>Ask the center how to connect with other FAL-COMP learners and alumni.</p>
+            <a class="text-link" href="index.html#enquire">Contact the center <span aria-hidden="true">↗</span></a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand brand-footer" href="index.html"><span class="brand-mark" aria-hidden="true">F</span><span class="brand-name">FAL-COMP <small>Literacy Center</small></span></a>
+        <p>Practical skills. Brighter possibilities.</p>
+        <span class="copyright">© <span id="year"></span> FAL-COMP Literacy Center</span>
+    </footer>
+</body>
+</html>

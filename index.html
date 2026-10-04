@@ -22,11 +22,18 @@
             <span></span><span></span>
         </button>
         <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-            <a href="#courses">Courses</a>
-            <a href="#about">Our center</a>
-            <a href="#alumni">Alumni</a>
-            <a class="nav-cta" href="#enquire">Find your course <span aria-hidden="true">↗</span></a>
-            <button class="profile-open" id="profile-open" type="button">Student sign in</button>
+            <a href="index.html#about">Our center</a>
+            <details class="nav-dropdown">
+                <summary>Explore</summary>
+                <div class="nav-dropdown-menu">
+                    <a href="courses.html">Courses &amp; fees <span>↗</span></a>
+                    <a href="alumni.html">Alumni community <span>↗</span></a>
+                    <a href="index.html#student-profile">Student sign in <span>↗</span></a>
+                    <a href="alumni-login.html">Alumni sign in <span>↗</span></a>
+                    <a href="application.html">Application portal <span>↗</span></a>
+                </div>
+            </details>
+            <a class="nav-cta" href="courses.html">Find your course <span aria-hidden="true">↗</span></a>
             <div class="site-controls">
                 <label class="language-control">
                     <span class="sr-only">Choose language</span>
@@ -44,7 +51,7 @@
         </nav>
     </header>
 
-    <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-title">
+    <dialog class="profile-dialog" id="student-profile" aria-labelledby="profile-title">
         <div class="profile-dialog-head">
             <span class="profile-kicker">FAL-COMP / STUDENT SPACE</span>
             <button class="profile-close" id="profile-close" type="button" aria-label="Close profile">×</button>
@@ -54,8 +61,8 @@
             <h2 id="profile-title">Your learning,<br><em>in one place.</em></h2>
             <p class="profile-intro">Sign in to see your student profile.</p>
             <form class="profile-form" id="profile-form">
-                <label for="profile-email">Email address</label>
-                <input id="profile-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                <label for="profile-student-id">Student ID (numbers only)</label>
+                <input id="profile-student-id" name="studentId" type="text" inputmode="numeric" pattern="[0-9]+" autocomplete="username" placeholder="Enter your student ID" required>
                 <label for="profile-password">Password</label>
                 <input id="profile-password" name="password" type="password" autocomplete="current-password" required>
                 <button class="button button-green" type="submit">Continue to demo profile <span aria-hidden="true">↗</span></button>
@@ -65,10 +72,10 @@
         <div class="profile-account-view" id="profile-account-view" hidden>
             <p class="eyebrow eyebrow-dark"><span></span> Student profile preview</p>
             <h2 id="profile-title-signed-in">Welcome,<br><em id="profile-name">student.</em></h2>
-            <p class="profile-email" id="profile-account-email"></p>
+            <p class="profile-email" id="profile-account-id"></p>
             <div class="profile-status"><span aria-hidden="true">✳</span><div><strong>Profile preview</strong><p>Course enrollments will appear here when student accounts are connected.</p></div></div>
             <div class="profile-actions">
-                <a class="button button-green" href="#courses" id="profile-courses-link">View courses <span aria-hidden="true">↗</span></a>
+                <a class="button button-green" href="courses.html" id="profile-courses-link">View courses <span aria-hidden="true">↗</span></a>
                 <button class="profile-signout" id="profile-signout" type="button">Sign out</button>
             </div>
         </div>
@@ -81,18 +88,11 @@
                 <p class="eyebrow"><span></span> Learn by doing. Grow with confidence.</p>
                 <h1 id="hero-title">Skills for<br>what’s <em>next.</em></h1>
                 <p class="hero-copy">Practical computer and digital skills for work, study, and everyday life. Start with what you need and build from there.</p>
-                <a class="button button-light" href="#courses">Explore our courses <span aria-hidden="true">↓</span></a>
+                <a class="button button-light" href="courses.html">Explore our courses <span aria-hidden="true">↗</span></a>
             </div>
             <div class="hero-note"><span class="note-star" aria-hidden="true">✳</span><span>Learn a skill.<br>Open a door.</span></div>
             <a class="scroll-cue" href="#about"><span></span> Scroll to explore</a>
         </section>
-
-        <nav class="home-pathways" aria-label="Explore the center">
-            <span class="pathways-label">Where would you like to go?</span>
-            <a href="#courses"><span>01</span> Explore courses <b aria-hidden="true">↗</b></a>
-            <a href="#about"><span>02</span> Our center <b aria-hidden="true">↗</b></a>
-            <a href="#alumni"><span>03</span> Alumni community <b aria-hidden="true">↗</b></a>
-        </nav>
 
         <section class="intro section-wrap" id="about">
             <div class="section-kicker">01 / About FAL-COMP</div>
@@ -100,7 +100,7 @@
                 <h2>A welcoming place to make technology <em>make sense.</em></h2>
                 <div class="intro-aside">
                     <p>FAL-COMP Literacy Center helps learners turn curiosity into practical ability. Our courses focus on useful skills you can practise, apply, and keep growing long after class.</p>
-                    <a class="text-link" href="#courses">Find the right starting point <span aria-hidden="true">↗</span></a>
+                    <a class="text-link" href="courses.html">Find the right starting point <span aria-hidden="true">↗</span></a>
                 </div>
             </div>
             <div class="values-row">
@@ -110,92 +110,14 @@
             </div>
         </section>
 
-        <section class="courses-section" id="courses" aria-labelledby="courses-title">
-            <div class="section-wrap courses-wrap">
-                <div class="section-kicker">02 / Learn something useful</div>
-                <div class="courses-heading">
-                    <div>
-                        <p class="eyebrow eyebrow-dark"><span></span> Find your next skill</p>
-                        <h2 id="courses-title">Choose your<br><em>starting point.</em></h2>
-                    </div>
-                    <p class="heading-note">Focused courses, straightforward fees, and monthly payment options to help you plan.</p>
-                </div>
-                <div class="course-list">
-                    <article class="course-row">
-                        <div class="course-number">01</div>
-                        <div class="course-info"><h3>Computer basics</h3><p>Get comfortable using a computer, managing files, and working online.</p></div>
-                        <div class="course-price"><span>Total course fee</span><strong>KSh 1,000</strong></div>
-                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 1 month</small></strong></div>
-                        <a class="course-arrow" href="#enquire" aria-label="Enquire about Computer basics">↗</a>
-                    </article>
-                    <article class="course-row">
-                        <div class="course-number">02</div>
-                        <div class="course-info"><h3>Programming languages</h3><p>Explore coding concepts and learn how to build with programming languages.</p></div>
-                        <div class="course-price"><span>Total course fee</span><strong>KSh 6,000</strong></div>
-                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,500 <small>/ 4 months</small></strong></div>
-                        <a class="course-arrow" href="#enquire" aria-label="Enquire about Programming languages">↗</a>
-                    </article>
-                    <article class="course-row">
-                        <div class="course-number">03</div>
-                        <div class="course-info"><h3>Graphic design</h3><p>Learn visual communication and create polished designs for print and digital.</p></div>
-                        <div class="course-price"><span>Total course fee</span><strong>KSh 3,750</strong></div>
-                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,250 <small>/ 3 months</small></strong></div>
-                        <a class="course-arrow" href="#enquire" aria-label="Enquire about Graphic design">↗</a>
-                    </article>
-                    <article class="course-row">
-                        <div class="course-number">04</div>
-                        <div class="course-info"><h3>Microsoft suite</h3><p>Build confidence with everyday documents, spreadsheets, and presentations.</p></div>
-                        <div class="course-price"><span>Total course fee</span><strong>KSh 2,000</strong></div>
-                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 2 months</small></strong></div>
-                        <a class="course-arrow" href="#enquire" aria-label="Enquire about Microsoft suite">↗</a>
-                    </article>
-                    <article class="course-row">
-                        <div class="course-number">05</div>
-                        <div class="course-info"><h3>Digital skills</h3><p>Navigate digital tools and online services with confidence and care.</p></div>
-                        <div class="course-price"><span>Total course fee</span><strong>KSh 2,000</strong></div>
-                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 2 months</small></strong></div>
-                        <a class="course-arrow" href="#enquire" aria-label="Enquire about Digital skills">↗</a>
-                    </article>
-                </div>
-                <p class="fees-note">Installment schedules shown are based on the monthly amounts and durations provided by the center.</p>
-            </div>
-        </section>
-
-        <section class="alumni-section" id="alumni" aria-labelledby="alumni-title">
-            <div class="section-wrap alumni-wrap">
-                <div class="section-kicker">03 / Keep in touch</div>
-                <div class="alumni-grid">
-                    <div class="alumni-stamp" aria-hidden="true"><span>FAL-COMP</span><strong>ALUMNI<br>COMMUNITY</strong><span>LEARN · SHARE · GROW</span></div>
-                    <div class="alumni-copy">
-                        <p class="eyebrow eyebrow-dark"><span></span> Your learning doesn't stop here</p>
-                        <h2 id="alumni-title">The next chapter is <em>together.</em></h2>
-                        <p>Stay connected with fellow learners, share what you’re working on, and keep discovering new ways to put your skills to use. The FAL-COMP alumni community is a place to keep learning and support one another.</p>
-                        <a class="button button-green" href="#enquire">Ask about the alumni community <span aria-hidden="true">↗</span></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="faq-section section-wrap" aria-labelledby="faq-title">
-            <div class="section-kicker">04 / Good to know</div>
-            <div class="faq-grid">
-                <h2 id="faq-title">A few helpful<br><em>answers.</em></h2>
-                <div class="faq-list">
-                    <details><summary>Can I pay in installments?<span aria-hidden="true">+</span></summary><p>Yes. Each course above shows its monthly installment amount and the number of months in the plan.</p></details>
-                    <details><summary>Which course should I start with?<span aria-hidden="true">+</span></summary><p>If you’re new to computers, Computer basics is a good place to begin. Choose another course if you already know what skill you want to build.</p></details>
-                    <details><summary>How do I ask about enrollment?<span aria-hidden="true">+</span></summary><p>Use the enquiry section below to get in touch with the center about course availability and enrollment.</p></details>
-                </div>
-            </div>
-        </section>
-
         <section class="contact-section" id="enquire" aria-labelledby="contact-title">
             <div class="section-wrap contact-wrap">
-                <div class="section-kicker">05 / Take the first step</div>
+                <div class="section-kicker">02 / Take the first step</div>
                 <div class="contact-content">
                     <p class="eyebrow"><span></span> Ready when you are</p>
                     <h2 id="contact-title">Make room for<br><em>what you can do.</em></h2>
                     <p>Ask the center about course dates, availability, and getting started.</p>
-                    <a class="button button-light" href="#courses">View course fees <span aria-hidden="true">↑</span></a>
+                    <a class="button button-light" href="courses.html">Explore our courses <span aria-hidden="true">↗</span></a>
                 </div>
                 <div class="contact-aside"><span class="contact-spark" aria-hidden="true">✳</span><p>FAL-COMP<br>Literacy Center</p><a href="#home">Back to top ↑</a></div>
             </div>

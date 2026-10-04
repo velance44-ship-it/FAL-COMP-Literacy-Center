@@ -2,21 +2,38 @@ const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector(".site-nav");
 const languageSelect = document.querySelector("#language-select");
 const themeToggle = document.querySelector("#theme-toggle");
-const profileDialog = document.querySelector("#profile-dialog");
+const profileDialog = document.querySelector("#student-profile");
 const profileOpen = document.querySelector("#profile-open");
 const profileClose = document.querySelector("#profile-close");
 const profileForm = document.querySelector("#profile-form");
+const studentIdInput = document.querySelector("#profile-student-id");
 const profileSigninView = document.querySelector("#profile-signin-view");
 const profileAccountView = document.querySelector("#profile-account-view");
 const profileName = document.querySelector("#profile-name");
-const profileAccountEmail = document.querySelector("#profile-account-email");
+const profileAccountId = document.querySelector("#profile-account-id");
 const profileSignout = document.querySelector("#profile-signout");
 const profileCoursesLink = document.querySelector("#profile-courses-link");
-let currentStudentEmail = null;
+const alumniLoginForm = document.querySelector("#alumni-login-form");
+const alumniLoginView = document.querySelector("#alumni-login-view");
+const alumniAccountView = document.querySelector("#alumni-account-view");
+const alumniProfileName = document.querySelector("#alumni-profile-name");
+const alumniAccountEmail = document.querySelector("#alumni-account-email");
+const alumniSignout = document.querySelector("#alumni-signout");
+const applicationForm = document.querySelector("#application-form");
+const applicationStatus = document.querySelector("#application-status");
+let currentStudentId = null;
+let applicationSubmitted = false;
+const applicationConfirmation = "Application preview complete. No information was sent or saved. Contact the center to apply.";
 
 const swahiliTranslations = {
 	"Literacy Center": "Kituo cha Elimu ya Kusoma na Kuandika",
 	"Courses": "Kozi",
+	"Alumni sign in": "Ingia kwa wahitimu",
+	"Application portal": "Tovuti ya maombi",
+	"Apply to study": "Omba kusoma",
+	"Explore": "Gundua",
+	"Courses & fees": "Kozi na ada",
+	"Contact the center": "Wasiliana na kituo",
 	"Our center": "Kuhusu kituo",
 	"Alumni": "Wahitimu",
 	"Find your course": "Chagua kozi yako",
@@ -99,6 +116,7 @@ const swahiliTranslations = {
 	"in one place.": "sehemu moja.",
 	"Sign in to see your student profile.": "Ingia ili kuona wasifu wako wa mwanafunzi.",
 	"Email address": "Anwani ya barua pepe",
+	"Student ID (numbers only)": "Nambari ya mwanafunzi (tarakimu pekee)",
 	"Password": "Nenosiri",
 	"Continue to demo profile": "Endelea kuona wasifu wa mfano",
 	"Preview only: this form does not verify passwords or access student records. Secure authentication must be connected before launch.": "Onyesho pekee: fomu hii haithibitishi nenosiri wala kufikia rekodi za wanafunzi. Mfumo salama wa kuingia unahitajika kabla ya tovuti kuzinduliwa.",
@@ -108,16 +126,43 @@ const swahiliTranslations = {
 	"Profile preview": "Onyesho la wasifu",
 	"Course enrollments will appear here when student accounts are connected.": "Taarifa za kozi ulizojiunga zitaonekana hapa akaunti za wanafunzi zitakapounganishwa.",
 	"View courses": "Tazama kozi",
-	"Sign out": "Ondoka"
+	"Sign out": "Ondoka",
+	"Welcome": "Karibu",
+	"back.": "tena.",
+	"Sign in to your alumni profile and reconnect with your learning community.": "Ingia kwenye wasifu wako wa mhitimu na uwasiliane tena na jumuiya yako ya kujifunza.",
+	"Continue to alumni profile": "Endelea kwenye wasifu wa mhitimu",
+	"Preview only: passwords are not checked or saved, and no alumni records are accessed. Connect a secure sign-in service before launch.": "Onyesho pekee: nenosiri halikaguliwi wala kuhifadhiwa, na rekodi za wahitimu hazifikiwi. Unganisha mfumo salama wa kuingia kabla ya kuzindua.",
+	"alumnus.": "mhitimu.",
+	"Alumni profile preview": "Onyesho la wasifu wa mhitimu",
+	"Community news, events, and alumni updates can appear here when accounts are connected.": "Habari za jumuiya, matukio na taarifa za wahitimu zitaonekana hapa akaunti zitakapounganishwa.",
+	"Start your": "Anza",
+	"application.": "maombi yako.",
+	"Tell us how to reach you and which course you’re interested in.": "Tuambie jinsi ya kuwasiliana nawe na kozi unayotaka.",
+	"Full name": "Jina kamili",
+	"Phone number": "Nambari ya simu",
+	"Course of interest": "Kozi unayotaka",
+	"Select a course": "Chagua kozi",
+	"Prepare application": "Andaa ombi",
+	"Preview only: this form does not send or store your information. Connect an application service before accepting submissions.": "Onyesho pekee: fomu hii haitumi wala kuhifadhi taarifa zako. Unganisha mfumo wa maombi kabla ya kupokea maombi.",
+	[applicationConfirmation]: "Ombi la mfano limekamilika. Hakuna taarifa iliyotumwa au kuhifadhiwa. Wasiliana na kituo ili kutuma ombi."
 };
 
 const interfaceLabels = {
 	en: {
 		title: "FAL-COMP Literacy Center | Skills for what's next",
+		titles: {
+			home: "FAL-COMP Literacy Center | Skills for what's next",
+			courses: "Courses & Fees | FAL-COMP Literacy Center",
+			alumni: "Alumni Community | FAL-COMP Literacy Center",
+			"alumni-login": "Alumni Sign In | FAL-COMP Literacy Center",
+			application: "Application Portal | FAL-COMP Literacy Center"
+		},
 		description: "Build practical computer, creative, and digital skills at FAL-COMP Literacy Center.",
 		home: "FAL-COMP Literacy Center home",
 		navigation: "Main navigation",
 		chooseLanguage: "Choose language",
+		studentId: "Student ID (numbers only)",
+		studentIdPlaceholder: "Enter your student ID",
 		darkMode: "Dark mode",
 		profileOpen: "Student sign in",
 		closeProfile: "Close profile",
@@ -128,10 +173,19 @@ const interfaceLabels = {
 	},
 	sw: {
 		title: "Kituo cha FAL-COMP | Ujuzi wa maisha yajayo",
+		titles: {
+			home: "Kituo cha FAL-COMP | Ujuzi wa maisha yajayo",
+			courses: "Kozi na Ada | Kituo cha FAL-COMP",
+			alumni: "Jumuiya ya Wahitimu | Kituo cha FAL-COMP",
+			"alumni-login": "Ingia kwa Wahitimu | Kituo cha FAL-COMP",
+			application: "Tovuti ya Maombi | Kituo cha FAL-COMP"
+		},
 		description: "Jifunze ujuzi wa kompyuta, ubunifu na teknolojia katika Kituo cha Elimu ya Kusoma na Kuandika cha FAL-COMP.",
 		home: "Mwanzo wa Kituo cha FAL-COMP",
 		navigation: "Urambazaji mkuu",
 		chooseLanguage: "Chagua lugha",
+		studentId: "Nambari ya mwanafunzi (tarakimu pekee)",
+		studentIdPlaceholder: "Ingiza nambari yako ya mwanafunzi",
 		darkMode: "Hali ya giza",
 		profileOpen: "Ingia kwenye akaunti ya mwanafunzi",
 		closeProfile: "Funga wasifu",
@@ -180,17 +234,24 @@ function setLanguage(language) {
 			node.nodeValue = source;
 		}
 	}
+	if (applicationSubmitted && applicationStatus) {
+		applicationStatus.textContent = translate ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+	}
 
 	document.documentElement.lang = translate ? "sw" : "en";
-	document.title = labels.title;
+	document.title = labels.titles[document.body.dataset.page || "home"] || labels.title;
 	document.querySelector('meta[name="description"]').content = labels.description;
 	document.querySelector('meta[name="theme-color"]').content = themeToggle.checked ? "#111f2b" : "#174c78";
 	document.querySelector(".brand").setAttribute("aria-label", labels.home);
 	siteNav.setAttribute("aria-label", labels.navigation);
 	languageSelect.setAttribute("aria-label", labels.chooseLanguage);
 	themeToggle.setAttribute("aria-label", labels.darkMode);
-	profileOpen.setAttribute("aria-label", labels.profileOpen);
-	profileClose.setAttribute("aria-label", labels.closeProfile);
+	if (studentIdInput) {
+		studentIdInput.setAttribute("aria-label", labels.studentId);
+		studentIdInput.placeholder = labels.studentIdPlaceholder;
+	}
+	if (profileOpen) profileOpen.setAttribute("aria-label", labels.profileOpen);
+	if (profileClose) profileClose.setAttribute("aria-label", labels.closeProfile);
 	menuToggle.setAttribute("aria-label", menuToggle.getAttribute("aria-expanded") === "true" ? labels.closeNavigation : labels.openNavigation);
 	document.querySelectorAll(".course-arrow").forEach((link, index) => {
 		link.setAttribute("aria-label", `${labels.enquire} ${labels.courses[index]}`);
@@ -221,11 +282,11 @@ languageSelect.addEventListener("change", () => {
 	savePreference("falcomp-language", languageSelect.value);
 });
 
-function showStudentProfile(email) {
-	currentStudentEmail = email;
-	const name = email.split("@")[0].replace(/[._-]+/g, " ").trim();
-	profileName.textContent = name ? `${name.charAt(0).toUpperCase()}${name.slice(1)}.` : "student.";
-	profileAccountEmail.textContent = email;
+if (profileDialog) {
+function showStudentProfile(studentId) {
+	currentStudentId = studentId;
+	profileName.textContent = "student.";
+	profileAccountId.textContent = `Student ID: ${studentId}`;
 	profileSigninView.hidden = true;
 	profileAccountView.hidden = false;
 }
@@ -235,62 +296,139 @@ function showStudentSignIn() {
 	profileSigninView.hidden = false;
 }
 
-try {
-	const savedStudentEmail = sessionStorage.getItem("falcomp-student-email");
-	if (savedStudentEmail) {
-		showStudentProfile(savedStudentEmail);
-	}
-} catch {
-	currentStudentEmail = null;
+function openStudentProfile() {
+	if (!currentStudentId) showStudentSignIn();
+	if (!profileDialog.open) profileDialog.showModal();
 }
 
-profileOpen.addEventListener("click", () => {
-	if (currentStudentEmail) {
-		showStudentProfile(currentStudentEmail);
-	} else {
+try {
+	const savedStudentId = sessionStorage.getItem("falcomp-student-id");
+	if (savedStudentId && /^\d+$/.test(savedStudentId)) {
+		showStudentProfile(savedStudentId);
+	}
+} catch {
+	currentStudentId = null;
+}
+
+if (profileOpen) {
+	profileOpen.addEventListener("click", () => {
+		if (currentStudentId) showStudentProfile(currentStudentId);
+		else showStudentSignIn();
+		profileDialog.showModal();
+	});
+}
+
+if (profileClose) profileClose.addEventListener("click", () => profileDialog.close());
+
+profileDialog.addEventListener("close", () => {
+	if (window.location.hash === "#student-profile") {
+		history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+	}
+});
+
+if (profileForm) {
+	studentIdInput.addEventListener("input", () => {
+		studentIdInput.value = studentIdInput.value.replace(/\D/g, "");
+	});
+
+	profileForm.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const studentId = new FormData(profileForm).get("studentId").trim();
+		if (!/^\d+$/.test(studentId)) return;
+		showStudentProfile(studentId);
+		try {
+			sessionStorage.setItem("falcomp-student-id", studentId);
+		} catch {
+			return;
+		}
+	});
+}
+
+if (profileSignout) {
+	profileSignout.addEventListener("click", () => {
+		currentStudentId = null;
+		try {
+			sessionStorage.removeItem("falcomp-student-id");
+		} catch {
+			showStudentSignIn();
+			return;
+		}
 		showStudentSignIn();
-	}
-	profileDialog.showModal();
+		profileForm.reset();
+	});
+}
+
+if (profileCoursesLink) profileCoursesLink.addEventListener("click", () => profileDialog.close());
+window.addEventListener("hashchange", () => {
+	if (window.location.hash === "#student-profile") openStudentProfile();
 });
+if (window.location.hash === "#student-profile") openStudentProfile();
+}
 
-profileClose.addEventListener("click", () => profileDialog.close());
+if (alumniLoginForm) {
+	function showAlumniProfile(email) {
+		const name = email.split("@")[0].replace(/[._-]+/g, " ").trim();
+		alumniProfileName.textContent = name ? `${name.charAt(0).toUpperCase()}${name.slice(1)}.` : "alumnus.";
+		alumniAccountEmail.textContent = email;
+		alumniLoginView.hidden = true;
+		alumniAccountView.hidden = false;
+	}
 
-profileForm.addEventListener("submit", (event) => {
-	event.preventDefault();
-	const email = new FormData(profileForm).get("email").trim();
-	showStudentProfile(email);
 	try {
-		sessionStorage.setItem("falcomp-student-email", email);
+		const savedAlumniEmail = sessionStorage.getItem("falcomp-alumni-email");
+		if (savedAlumniEmail) showAlumniProfile(savedAlumniEmail);
 	} catch {
-		return;
+		alumniLoginForm.reset();
 	}
-});
 
-profileSignout.addEventListener("click", () => {
-	currentStudentEmail = null;
-	try {
-		sessionStorage.removeItem("falcomp-student-email");
-	} catch {
-		showStudentSignIn();
-		return;
-	}
-	showStudentSignIn();
-	profileForm.reset();
-});
+	alumniLoginForm.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const email = new FormData(alumniLoginForm).get("email").trim();
+		showAlumniProfile(email);
+		try {
+			sessionStorage.setItem("falcomp-alumni-email", email);
+		} catch {
+			return;
+		}
+	});
 
-profileCoursesLink.addEventListener("click", () => profileDialog.close());
+	alumniSignout.addEventListener("click", () => {
+		try {
+			sessionStorage.removeItem("falcomp-alumni-email");
+		} catch {
+			alumniLoginView.hidden = false;
+			alumniAccountView.hidden = true;
+			alumniLoginForm.reset();
+			return;
+		}
+		alumniLoginView.hidden = false;
+		alumniAccountView.hidden = true;
+		alumniLoginForm.reset();
+	});
+}
+
+if (applicationForm) {
+	applicationForm.addEventListener("submit", (event) => {
+		event.preventDefault();
+		applicationSubmitted = true;
+		const isSwahili = languageSelect.value === "sw";
+		applicationStatus.textContent = isSwahili ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+	});
+}
 
 menuToggle.addEventListener("click", () => {
 	const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+	const labels = interfaceLabels[languageSelect.value] || interfaceLabels.en;
 	menuToggle.setAttribute("aria-expanded", String(!isExpanded));
-	menuToggle.setAttribute("aria-label", isExpanded ? "Open navigation" : "Close navigation");
+	menuToggle.setAttribute("aria-label", isExpanded ? labels.openNavigation : labels.closeNavigation);
 	siteNav.classList.toggle("is-open", !isExpanded);
 });
 
 siteNav.addEventListener("click", (event) => {
 	if (event.target.closest("a")) {
+		const labels = interfaceLabels[languageSelect.value] || interfaceLabels.en;
 		menuToggle.setAttribute("aria-expanded", "false");
-		menuToggle.setAttribute("aria-label", "Open navigation");
+		menuToggle.setAttribute("aria-label", labels.openNavigation);
 		siteNav.classList.remove("is-open");
 	}
 });

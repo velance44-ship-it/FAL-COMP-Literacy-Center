@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#174c78">
+    <meta name="description" content="Explore courses and installment fees at FAL-COMP Literacy Center.">
+    <title>Courses &amp; Fees | FAL-COMP Literacy Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body data-page="courses">
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="FAL-COMP Literacy Center home">
+            <span class="brand-mark" aria-hidden="true">F</span>
+            <span class="brand-name">FAL-COMP <small>Literacy Center</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+            <span></span><span></span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+            <a href="index.html#about">Our center</a>
+            <details class="nav-dropdown">
+                <summary>Explore</summary>
+                <div class="nav-dropdown-menu">
+                    <a href="courses.html" aria-current="page">Courses &amp; fees <span>↗</span></a>
+                    <a href="alumni.html">Alumni community <span>↗</span></a>
+                    <a href="index.html#student-profile">Student sign in <span>↗</span></a>
+                    <a href="alumni-login.html">Alumni sign in <span>↗</span></a>
+                    <a href="application.html">Application portal <span>↗</span></a>
+                </div>
+            </details>
+            <a class="nav-cta" href="index.html#enquire">Contact the center <span aria-hidden="true">↗</span></a>
+            <div class="site-controls">
+                <label class="language-control">
+                    <span class="sr-only">Choose language</span>
+                    <select id="language-select" aria-label="Choose language">
+                        <option value="en">English</option>
+                        <option value="sw">Kiswahili</option>
+                    </select>
+                </label>
+                <label class="theme-control" for="theme-toggle">
+                    <span class="theme-icon" aria-hidden="true">◐</span>
+                    <span class="theme-label">Dark mode</span>
+                    <input id="theme-toggle" type="checkbox" role="switch" aria-label="Dark mode" aria-checked="false">
+                </label>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="courses-section page-courses" id="courses" aria-labelledby="courses-title">
+            <div class="section-wrap courses-wrap">
+                <div class="section-kicker">01 / Learn something useful</div>
+                <div class="courses-heading">
+                    <div>
+                        <p class="eyebrow eyebrow-dark"><span></span> Find your next skill</p>
+                        <h1 id="courses-title">Choose your<br><em>starting point.</em></h1>
+                    </div>
+                    <p class="heading-note">Focused courses, straightforward fees, and monthly payment options to help you plan.</p>
+                </div>
+                <div class="course-list">
+                    <article class="course-row">
+                        <div class="course-number">01</div>
+                        <div class="course-info"><h2>Computer basics</h2><p>Get comfortable using a computer, managing files, and working online.</p></div>
+                        <div class="course-price"><span>Total course fee</span><strong>KSh 1,000</strong></div>
+                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 1 month</small></strong></div>
+                        <a class="course-arrow" href="index.html#enquire" aria-label="Enquire about Computer basics">↗</a>
+                    </article>
+                    <article class="course-row">
+                        <div class="course-number">02</div>
+                        <div class="course-info"><h2>Programming languages</h2><p>Explore coding concepts and learn how to build with programming languages.</p></div>
+                        <div class="course-price"><span>Total course fee</span><strong>KSh 6,000</strong></div>
+                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,500 <small>/ 4 months</small></strong></div>
+                        <a class="course-arrow" href="index.html#enquire" aria-label="Enquire about Programming languages">↗</a>
+                    </article>
+                    <article class="course-row">
+                        <div class="course-number">03</div>
+                        <div class="course-info"><h2>Graphic design</h2><p>Learn visual communication and create polished designs for print and digital.</p></div>
+                        <div class="course-price"><span>Total course fee</span><strong>KSh 3,750</strong></div>
+                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,250 <small>/ 3 months</small></strong></div>
+                        <a class="course-arrow" href="index.html#enquire" aria-label="Enquire about Graphic design">↗</a>
+                    </article>
+                    <article class="course-row">
+                        <div class="course-number">04</div>
+                        <div class="course-info"><h2>Microsoft suite</h2><p>Build confidence with everyday documents, spreadsheets, and presentations.</p></div>
+                        <div class="course-price"><span>Total course fee</span><strong>KSh 2,000</strong></div>
+                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 2 months</small></strong></div>
+                        <a class="course-arrow" href="index.html#enquire" aria-label="Enquire about Microsoft suite">↗</a>
+                    </article>
+                    <article class="course-row">
+                        <div class="course-number">05</div>
+                        <div class="course-info"><h2>Digital skills</h2><p>Navigate digital tools and online services with confidence and care.</p></div>
+                        <div class="course-price"><span>Total course fee</span><strong>KSh 2,000</strong></div>
+                        <div class="course-installment"><span>Monthly plan</span><strong>KSh 1,000 <small>/ 2 months</small></strong></div>
+                        <a class="course-arrow" href="index.html#enquire" aria-label="Enquire about Digital skills">↗</a>
+                    </article>
+                </div>
+                <p class="fees-note">Installment schedules shown are based on the monthly amounts and durations provided by the center.</p>
+            </div>
+        </section>
+
+        <section class="faq-section section-wrap" aria-labelledby="faq-title">
+            <div class="section-kicker">02 / Good to know</div>
+            <div class="faq-grid">
+                <h2 id="faq-title">A few helpful<br><em>answers.</em></h2>
+                <div class="faq-list">
+                    <details><summary>Can I pay in installments?<span aria-hidden="true">+</span></summary><p>Yes. Each course above shows its monthly installment amount and the number of months in the plan.</p></details>
+                    <details><summary>Which course should I start with?<span aria-hidden="true">+</span></summary><p>If you’re new to computers, Computer basics is a good place to begin. Choose another course if you already know what skill you want to build.</p></details>
+                    <details><summary>How do I ask about enrollment?<span aria-hidden="true">+</span></summary><p>Use the contact link above to get in touch with the center about course availability and enrollment.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand brand-footer" href="index.html"><span class="brand-mark" aria-hidden="true">F</span><span class="brand-name">FAL-COMP <small>Literacy Center</small></span></a>
+        <p>Practical skills. Brighter possibilities.</p>
+        <span class="copyright">© <span id="year"></span> FAL-COMP Literacy Center</span>
+    </footer>
+</body>
+</html>
