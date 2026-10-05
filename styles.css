@@ -44,17 +44,17 @@ button { font: inherit; }
 
 .brand { display: inline-flex; align-items: center; gap: 11px; }
 .brand-mark {
-	display: grid;
-	width: 39px;
-	aspect-ratio: 1;
-	place-items: center;
+	--mark-size: 39px;
+	position: relative;
+	display: block;
+	width: var(--mark-size);
+	height: var(--mark-size);
+	flex: 0 0 var(--mark-size);
+	overflow: hidden;
 	border-radius: 50%;
-	background: var(--coral);
-	color: var(--white);
-	font-family: var(--display);
-	font-size: 24px;
-	font-weight: 700;
+	background: var(--white);
 }
+.brand-mark img { position: absolute; top: calc(var(--mark-size) * -.15); left: calc(var(--mark-size) * -.8); width: calc(var(--mark-size) * 2.62); max-width: none; height: auto; }
 .brand-name { font-size: 13px; font-weight: 700; line-height: 1.2; letter-spacing: 0; }
 .brand-name small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 500; }
 .site-nav { display: flex; align-items: center; gap: clamp(12px, 1.4vw, 20px); }
@@ -103,6 +103,9 @@ button { font: inherit; }
 .profile-form input { width: 100%; min-height: 45px; padding: 0 12px; border: 1px solid var(--line); border-radius: 0; background: var(--white); color: var(--ink); font: 13px var(--body); }
 .profile-form input:focus-visible, .profile-close:focus-visible, .profile-signout:focus-visible, .profile-open:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .profile-form button { width: 100%; margin-top: 11px; border: 0; cursor: pointer; }
+.profile-form button:disabled { cursor: wait; opacity: .7; }
+.profile-form-status { margin: 10px 0 0; color: #b42318; font-size: 11px; }
+.profile-form-status[hidden] { display: none; }
 .profile-demo-note { margin: 17px 0 0; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.55; }
 .profile-email { margin: 10px 0 22px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
 .profile-status { display: flex; gap: 13px; padding: 17px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -209,10 +212,28 @@ button { font: inherit; }
 .portal-content h1 em { color: var(--coral); font-weight: 500; }
 .portal-intro { max-width: 440px; margin: 17px 0 25px; color: var(--muted); font-size: 13px; }
 .portal-form { display: grid; max-width: 470px; gap: 8px; }
+.application-step { display: grid; gap: 8px; }
+.application-step[hidden] { display: none; }
+.application-step h2 { margin: 12px 0 3px; font-family: var(--display); font-size: 23px; font-weight: 600; }
 .portal-form label { margin-top: 5px; font-size: 11px; font-weight: 700; }
 .portal-form input, .portal-form select { width: 100%; min-height: 45px; padding: 0 12px; border: 1px solid var(--line); border-radius: 0; background: var(--white); color: var(--ink); font: 13px var(--body); }
+.portal-form input[type="file"] { min-height: 0; padding: 10px; font-size: 11px; }
 .portal-form input:focus-visible, .portal-form select:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .portal-form button { width: fit-content; margin-top: 14px; border: 0; cursor: pointer; }
+.portal-form button:disabled { cursor: wait; opacity: .65; }
+.upload-help { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.upload-file-list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.upload-file-list li { overflow-wrap: anywhere; color: var(--forest); font-size: 10px; }
+.upload-file-list a { color: var(--forest); text-decoration: underline; text-underline-offset: 2px; }
+.application-actions { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 10px; }
+.application-actions .button:hover { transform: none; }
+.application-back { padding: 10px 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; font-size: 11px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.file-preview-dialog { width: min(900px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow: auto; padding: 22px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+.file-preview-dialog::backdrop { background: rgb(8 30 48 / 72%); }
+.file-preview-dialog .profile-dialog-head { margin-bottom: 16px; }
+.file-preview-content { display: grid; min-height: 120px; place-items: center; }
+.file-preview-content img { display: block; max-width: 100%; max-height: 70vh; object-fit: contain; }
+.file-preview-content iframe { display: block; width: 100%; height: min(70vh, 680px); border: 0; background: var(--white); }
 .portal-note { max-width: 470px; margin: 21px 0 0; padding-left: 12px; border-left: 2px solid var(--coral); color: var(--muted); font-size: 10px; line-height: 1.6; }
 .portal-status { max-width: 470px; margin-top: 25px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .portal-status strong { font-size: 12px; }
@@ -243,7 +264,7 @@ button { font: inherit; }
 .contact-aside p { margin: 8px 0 22px; font-family: var(--display); font-size: 17px; line-height: 1.2; }
 .contact-aside a { color: rgb(255 254 250 / 65%); font-size: 10px; }
 .site-footer { display: flex; min-height: 95px; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 7.2%; background: var(--forest-deep); color: var(--white); }
-.brand-footer .brand-mark { width: 32px; background: var(--coral); font-size: 19px; }
+.brand-footer .brand-mark { --mark-size: 32px; }
 .brand-footer .brand-name { font-size: 11px; }
 .brand-footer .brand-name small { color: rgb(255 254 250 / 57%); font-size: 9px; }
 .site-footer > p, .copyright { color: rgb(255 254 250 / 57%); font-size: 10px; }
@@ -293,7 +314,7 @@ button { font: inherit; }
 @media (max-width: 680px) {
 	html { scroll-padding-top: 70px; }
 	.site-header { min-height: 70px; padding: 0 6%; }
-	.brand-mark { width: 34px; font-size: 21px; }
+	.brand-mark { --mark-size: 34px; }
 	.brand-name { font-size: 12px; }
 	.menu-toggle { display: flex; width: 42px; height: 42px; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
 	.menu-toggle span { width: 17px; height: 1px; background: currentColor; transition: transform .2s ease; }

@@ -1,3 +1,27 @@
+window.FALCOMP_SUPABASE_URL = "https://vzupbymelpmtpibrfypq.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dXBieW1lbHBtdHBpYnJmeXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzI4MDksImV4cCI6MjEwNjcwODgwOX0.5gPhnsv6nztXSO4Nx5TcALfU8vziFjRfF_q8ELUjPxY";
+
+const supabaseClientReady = new Promise((resolve) => {
+	function initializeSupabaseClient() {
+		if (!window.FALCOMP_SUPABASE && window.supabase?.createClient) {
+			window.FALCOMP_SUPABASE = window.supabase.createClient(window.FALCOMP_SUPABASE_URL, supabaseAnonKey);
+		}
+		resolve(window.FALCOMP_SUPABASE || null);
+	}
+
+	if (window.supabase?.createClient) {
+		initializeSupabaseClient();
+		return;
+	}
+
+	const libraryScript = document.createElement("script");
+	libraryScript.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+	libraryScript.async = true;
+	libraryScript.addEventListener("load", initializeSupabaseClient, { once: true });
+	libraryScript.addEventListener("error", () => resolve(null), { once: true });
+	document.head.append(libraryScript);
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector(".site-nav");
 const languageSelect = document.querySelector("#language-select");
@@ -6,7 +30,8 @@ const profileDialog = document.querySelector("#student-profile");
 const profileOpen = document.querySelector("#profile-open");
 const profileClose = document.querySelector("#profile-close");
 const profileForm = document.querySelector("#profile-form");
-const studentIdInput = document.querySelector("#profile-student-id");
+const profileFormStatus = document.querySelector("#profile-form-status");
+const profileEmailInput = document.querySelector("#profile-email");
 const profileSigninView = document.querySelector("#profile-signin-view");
 const profileAccountView = document.querySelector("#profile-account-view");
 const profileName = document.querySelector("#profile-name");
@@ -21,9 +46,34 @@ const alumniAccountEmail = document.querySelector("#alumni-account-email");
 const alumniSignout = document.querySelector("#alumni-signout");
 const applicationForm = document.querySelector("#application-form");
 const applicationStatus = document.querySelector("#application-status");
-let currentStudentId = null;
+const applicationNext = document.querySelector("#application-next");
+const applicationBack = document.querySelector("#application-back");
+const applicationFinish = document.querySelector("#application-finish");
+const applicationContactStep = document.querySelector("#application-contact-step");
+const applicationEducationStep = document.querySelector("#application-education-step");
+const applicationFiles = document.querySelector("#school-documents");
+const applicationFileList = document.querySelector("#application-file-list");
+const applicationFilePreviewUrls = [];
+const applicationFilePreview = document.querySelector("#application-file-preview");
+const applicationFilePreviewTitle = document.querySelector("#application-file-preview-title");
+const applicationFilePreviewContent = document.querySelector("#application-file-preview-content");
+const applicationFilePreviewClose = document.querySelector("#application-file-preview-close");
+let currentStudent = null;
 let applicationSubmitted = false;
-const applicationConfirmation = "Application preview complete. No information was sent or saved. Contact the center to apply.";
+let applicationReference = "";
+const applicationConfirmation = "Application submitted successfully.";
+const applicationSubmitMessages = {
+	en: {
+		pending: "Sending your application and documents securely...",
+		failed: "We couldn't submit the application. Your information is still here; please try again.",
+		unavailable: "The submission service is unavailable right now. Please try again later."
+	},
+	sw: {
+		pending: "Ombi na nyaraka zako zinatumwa kwa usalama...",
+		failed: "Ombi halikutumwa. Taarifa zako bado zipo hapa; tafadhali jaribu tena.",
+		unavailable: "Huduma ya kutuma maombi haipatikani kwa sasa. Tafadhali jaribu tena baadaye."
+	}
+};
 
 const swahiliTranslations = {
 	"Literacy Center": "Kituo cha Elimu ya Kusoma na Kuandika",
@@ -116,15 +166,14 @@ const swahiliTranslations = {
 	"in one place.": "sehemu moja.",
 	"Sign in to see your student profile.": "Ingia ili kuona wasifu wako wa mwanafunzi.",
 	"Email address": "Anwani ya barua pepe",
-	"Student ID (numbers only)": "Nambari ya mwanafunzi (tarakimu pekee)",
 	"Password": "Nenosiri",
-	"Continue to demo profile": "Endelea kuona wasifu wa mfano",
-	"Preview only: this form does not verify passwords or access student records. Secure authentication must be connected before launch.": "Onyesho pekee: fomu hii haithibitishi nenosiri wala kufikia rekodi za wanafunzi. Mfumo salama wa kuingia unahitajika kabla ya tovuti kuzinduliwa.",
-	"Student profile preview": "Onyesho la wasifu wa mwanafunzi",
+	"Sign in": "Ingia",
+	"Sign in with the email and password connected to your student account.": "Ingia kwa kutumia barua pepe na nenosiri linalohusishwa na akaunti yako ya mwanafunzi.",
+	"Student account": "Akaunti ya mwanafunzi",
 	"Welcome,": "Karibu,",
 	"student.": "mwanafunzi.",
-	"Profile preview": "Onyesho la wasifu",
-	"Course enrollments will appear here when student accounts are connected.": "Taarifa za kozi ulizojiunga zitaonekana hapa akaunti za wanafunzi zitakapounganishwa.",
+	"Account connected": "Akaunti imeunganishwa",
+	"Your course enrollments will appear here when available.": "Kozi ulizojiunga zitaonekana hapa zitakapopatikana.",
 	"View courses": "Tazama kozi",
 	"Sign out": "Ondoka",
 	"Welcome": "Karibu",
@@ -138,13 +187,38 @@ const swahiliTranslations = {
 	"Start your": "Anza",
 	"application.": "maombi yako.",
 	"Tell us how to reach you and which course you’re interested in.": "Tuambie jinsi ya kuwasiliana nawe na kozi unayotaka.",
+	"Your details": "Taarifa zako",
 	"Full name": "Jina kamili",
 	"Phone number": "Nambari ya simu",
 	"Course of interest": "Kozi unayotaka",
 	"Select a course": "Chagua kozi",
-	"Prepare application": "Andaa ombi",
-	"Preview only: this form does not send or store your information. Connect an application service before accepting submissions.": "Onyesho pekee: fomu hii haitumi wala kuhifadhi taarifa zako. Unganisha mfumo wa maombi kabla ya kupokea maombi.",
-	[applicationConfirmation]: "Ombi la mfano limekamilika. Hakuna taarifa iliyotumwa au kuhifadhiwa. Wasiliana na kituo ili kutuma ombi."
+	"Continue to education": "Endelea na elimu",
+	"Education background": "Historia ya elimu",
+	"Previous school": "Shule uliyosoma awali",
+	"Last class or level completed": "Darasa au kiwango cha mwisho ulichomaliza",
+	"Year you left school": "Mwaka ulioacha shule",
+	"School documents": "Nyaraka za shule",
+	"Attach certificates, school reports, or other relevant records (PDF, JPG, or PNG).": "Ambatisha vyeti, ripoti za shule au rekodi nyingine muhimu (PDF, JPG au PNG).",
+	"Finish application": "Kamilisha ombi",
+	"Complete the education details and attach at least one school document before finishing.": "Jaza taarifa za elimu na ambatisha angalau hati moja ya shule kabla ya kumaliza.",
+	"Back": "Rudi",
+	"Complete the form and attach your school documents to submit your application.": "Jaza fomu na ambatisha nyaraka za shule ili kutuma ombi lako.",
+	[applicationConfirmation]: "Ombi limetumwa kwa mafanikio.",
+};
+
+const studentLoginMessages = {
+	en: {
+		failed: "Email or password is incorrect.",
+		unavailable: "Sign-in is temporarily unavailable. Please try again later.",
+		unlinked: "No approved student profile is linked to this account. Contact the center.",
+		profileUnavailable: "Your approved student profile could not be loaded. Please try again later."
+	},
+	sw: {
+		failed: "Barua pepe au nenosiri si sahihi.",
+		unavailable: "Kuingia hakupatikani kwa sasa. Tafadhali jaribu tena baadaye.",
+		unlinked: "Hakuna wasifu wa mwanafunzi ulioidhinishwa unaohusishwa na akaunti hii. Wasiliana na kituo.",
+		profileUnavailable: "Wasifu wako wa mwanafunzi ulioidhinishwa hauwezi kupakiwa sasa. Tafadhali jaribu tena baadaye."
+	}
 };
 
 const interfaceLabels = {
@@ -161,8 +235,8 @@ const interfaceLabels = {
 		home: "FAL-COMP Literacy Center home",
 		navigation: "Main navigation",
 		chooseLanguage: "Choose language",
-		studentId: "Student ID (numbers only)",
-		studentIdPlaceholder: "Enter your student ID",
+		email: "Email address",
+		emailPlaceholder: "you@example.com",
 		darkMode: "Dark mode",
 		profileOpen: "Student sign in",
 		closeProfile: "Close profile",
@@ -184,8 +258,8 @@ const interfaceLabels = {
 		home: "Mwanzo wa Kituo cha FAL-COMP",
 		navigation: "Urambazaji mkuu",
 		chooseLanguage: "Chagua lugha",
-		studentId: "Nambari ya mwanafunzi (tarakimu pekee)",
-		studentIdPlaceholder: "Ingiza nambari yako ya mwanafunzi",
+		email: "Anwani ya barua pepe",
+		emailPlaceholder: "barua-pepe-yako@mfano.com",
 		darkMode: "Hali ya giza",
 		profileOpen: "Ingia kwenye akaunti ya mwanafunzi",
 		closeProfile: "Funga wasifu",
@@ -235,7 +309,9 @@ function setLanguage(language) {
 		}
 	}
 	if (applicationSubmitted && applicationStatus) {
-		applicationStatus.textContent = translate ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+		const confirmation = translate ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+		const referenceLabel = translate ? "Nambari ya rejea" : "Reference";
+		applicationStatus.textContent = `${confirmation} ${referenceLabel}: ${applicationReference}`;
 	}
 
 	document.documentElement.lang = translate ? "sw" : "en";
@@ -246,9 +322,9 @@ function setLanguage(language) {
 	siteNav.setAttribute("aria-label", labels.navigation);
 	languageSelect.setAttribute("aria-label", labels.chooseLanguage);
 	themeToggle.setAttribute("aria-label", labels.darkMode);
-	if (studentIdInput) {
-		studentIdInput.setAttribute("aria-label", labels.studentId);
-		studentIdInput.placeholder = labels.studentIdPlaceholder;
+	if (profileEmailInput) {
+		profileEmailInput.setAttribute("aria-label", labels.email);
+		profileEmailInput.placeholder = labels.emailPlaceholder;
 	}
 	if (profileOpen) profileOpen.setAttribute("aria-label", labels.profileOpen);
 	if (profileClose) profileClose.setAttribute("aria-label", labels.closeProfile);
@@ -283,86 +359,139 @@ languageSelect.addEventListener("change", () => {
 });
 
 if (profileDialog) {
-function showStudentProfile(studentId) {
-	currentStudentId = studentId;
-	profileName.textContent = "student.";
-	profileAccountId.textContent = `Student ID: ${studentId}`;
-	profileSigninView.hidden = true;
-	profileAccountView.hidden = false;
-}
-
-function showStudentSignIn() {
-	profileAccountView.hidden = true;
-	profileSigninView.hidden = false;
-}
-
-function openStudentProfile() {
-	if (!currentStudentId) showStudentSignIn();
-	if (!profileDialog.open) profileDialog.showModal();
-}
-
-try {
-	const savedStudentId = sessionStorage.getItem("falcomp-student-id");
-	if (savedStudentId && /^\d+$/.test(savedStudentId)) {
-		showStudentProfile(savedStudentId);
+	function showStudentProfile(student) {
+		currentStudent = student;
+		profileName.textContent = student.student_name || "student.";
+		const studentId = student.student_id_number ?? student.student_id ?? "";
+		const idLabel = languageSelect.value === "sw" ? "Nambari ya mwanafunzi" : "Student ID";
+		profileAccountId.textContent = `${idLabel}: ${studentId}`;
+		profileSigninView.hidden = true;
+		profileAccountView.hidden = false;
 	}
-} catch {
-	currentStudentId = null;
-}
 
-if (profileOpen) {
-	profileOpen.addEventListener("click", () => {
-		if (currentStudentId) showStudentProfile(currentStudentId);
+	function showStudentSignIn() {
+		profileAccountView.hidden = true;
+		profileSigninView.hidden = false;
+	}
+
+	async function loadStudentProfile(client, userId) {
+		const { data: student, error } = await client
+			.from("students")
+			.select("student_name, student_id_number")
+			.eq("approval_status", "approved")
+			.eq("user_id", userId)
+			.maybeSingle();
+		if (error) throw error;
+		return student;
+	}
+
+	function openStudentProfile() {
+		if (currentStudent) showStudentProfile(currentStudent);
 		else showStudentSignIn();
-		profileDialog.showModal();
-	});
-}
-
-if (profileClose) profileClose.addEventListener("click", () => profileDialog.close());
-
-profileDialog.addEventListener("close", () => {
-	if (window.location.hash === "#student-profile") {
-		history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+		if (!profileDialog.open) profileDialog.showModal();
 	}
-});
 
-if (profileForm) {
-	studentIdInput.addEventListener("input", () => {
-		studentIdInput.value = studentIdInput.value.replace(/\D/g, "");
-	});
-
-	profileForm.addEventListener("submit", (event) => {
-		event.preventDefault();
-		const studentId = new FormData(profileForm).get("studentId").trim();
-		if (!/^\d+$/.test(studentId)) return;
-		showStudentProfile(studentId);
+	supabaseClientReady.then(async (client) => {
+		if (!client) return;
+		const { data, error } = await client.auth.getSession();
+		if (error || !data.session) return;
 		try {
-			sessionStorage.setItem("falcomp-student-id", studentId);
+			const student = await loadStudentProfile(client, data.session.user.id);
+			if (student) {
+				showStudentProfile(student);
+			} else {
+				await client.auth.signOut();
+				const language = languageSelect.value === "sw" ? "sw" : "en";
+				profileFormStatus.textContent = studentLoginMessages[language].unlinked;
+				profileFormStatus.hidden = false;
+			}
 		} catch {
+			const language = languageSelect.value === "sw" ? "sw" : "en";
+			profileFormStatus.textContent = studentLoginMessages[language].profileUnavailable;
+			profileFormStatus.hidden = false;
 			return;
 		}
 	});
-}
 
-if (profileSignout) {
-	profileSignout.addEventListener("click", () => {
-		currentStudentId = null;
-		try {
-			sessionStorage.removeItem("falcomp-student-id");
-		} catch {
+	if (profileOpen) {
+		profileOpen.addEventListener("click", () => {
+			openStudentProfile();
+		});
+	}
+
+	if (profileClose) profileClose.addEventListener("click", () => profileDialog.close());
+
+	profileDialog.addEventListener("close", () => {
+		if (window.location.hash === "#student-profile") {
+			history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+		}
+	});
+
+	if (profileForm) {
+		const submitButton = profileForm.querySelector('button[type="submit"]');
+		const submitLabel = submitButton.textContent;
+
+		function showStudentError(message) {
+			const language = languageSelect.value === "sw" ? "sw" : "en";
+			profileFormStatus.textContent = studentLoginMessages[language][message];
+			profileFormStatus.hidden = false;
+		}
+
+		profileEmailInput.addEventListener("input", () => {
+			profileFormStatus.hidden = true;
+		});
+
+		profileForm.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			const formData = new FormData(profileForm);
+			const email = formData.get("email").trim();
+			const password = formData.get("password");
+			const client = await supabaseClientReady;
+			if (!client) {
+				showStudentError("unavailable");
+				return;
+			}
+
+			submitButton.disabled = true;
+			profileFormStatus.hidden = true;
+			try {
+				const { data: authData, error: authError } = await client.auth.signInWithPassword({ email, password });
+				if (authError || !authData.user) {
+					showStudentError("failed");
+					return;
+				}
+
+				const student = await loadStudentProfile(client, authData.user.id);
+				if (!student) {
+					await client.auth.signOut();
+					showStudentError("unlinked");
+					return;
+				}
+				showStudentProfile(student);
+			} catch {
+				showStudentError("unavailable");
+			} finally {
+				submitButton.disabled = false;
+				submitButton.firstChild.textContent = submitLabel.trim();
+			}
+		});
+	}
+
+	if (profileSignout) {
+		profileSignout.addEventListener("click", async () => {
+			currentStudent = null;
+			const client = await supabaseClientReady;
+			await client?.auth.signOut();
 			showStudentSignIn();
-			return;
-		}
-		showStudentSignIn();
-		profileForm.reset();
-	});
-}
+			profileForm.reset();
+		});
+	}
 
-if (profileCoursesLink) profileCoursesLink.addEventListener("click", () => profileDialog.close());
-window.addEventListener("hashchange", () => {
+	if (profileCoursesLink) profileCoursesLink.addEventListener("click", () => profileDialog.close());
+	window.addEventListener("hashchange", () => {
+		if (window.location.hash === "#student-profile") openStudentProfile();
+	});
 	if (window.location.hash === "#student-profile") openStudentProfile();
-});
-if (window.location.hash === "#student-profile") openStudentProfile();
 }
 
 if (alumniLoginForm) {
@@ -408,11 +537,121 @@ if (alumniLoginForm) {
 }
 
 if (applicationForm) {
-	applicationForm.addEventListener("submit", (event) => {
+	applicationNext.addEventListener("click", () => {
+		for (const field of applicationContactStep.querySelectorAll("input, select")) {
+			if (!field.reportValidity()) return;
+		}
+		applicationContactStep.hidden = true;
+		applicationEducationStep.hidden = false;
+		document.querySelector("#previous-school").focus();
+	});
+
+	applicationBack.addEventListener("click", () => {
+		applicationEducationStep.hidden = true;
+		applicationContactStep.hidden = false;
+		applicationNext.focus();
+	});
+
+	applicationFiles.addEventListener("change", () => {
+		for (const url of applicationFilePreviewUrls) URL.revokeObjectURL(url);
+		applicationFilePreviewUrls.length = 0;
+		applicationFileList.replaceChildren();
+		for (const file of applicationFiles.files) {
+			const item = document.createElement("li");
+			const previewLink = document.createElement("a");
+			const previewUrl = URL.createObjectURL(file);
+			applicationFilePreviewUrls.push(previewUrl);
+			previewLink.href = previewUrl;
+			previewLink.dataset.previewName = file.name;
+			previewLink.dataset.previewType = file.type;
+			previewLink.textContent = file.name;
+			item.append(previewLink, ` (${Math.ceil(file.size / 1024)} KB)`);
+			applicationFileList.append(item);
+		}
+	});
+
+	applicationFileList.addEventListener("click", (event) => {
+		const link = event.target.closest("a[data-preview-name]");
+		if (!link) return;
 		event.preventDefault();
-		applicationSubmitted = true;
+		applicationFilePreviewTitle.textContent = link.dataset.previewName;
+		applicationFilePreviewContent.replaceChildren();
+
+		if (link.dataset.previewType.startsWith("image/")) {
+			const image = document.createElement("img");
+			image.src = link.href;
+			image.alt = link.dataset.previewName;
+			applicationFilePreviewContent.append(image);
+		} else {
+			const documentFrame = document.createElement("iframe");
+			documentFrame.src = link.href;
+			documentFrame.title = link.dataset.previewName;
+			applicationFilePreviewContent.append(documentFrame);
+		}
+
+		applicationFilePreview.showModal();
+	});
+
+	applicationFilePreviewClose.addEventListener("click", () => applicationFilePreview.close());
+
+	window.addEventListener("pagehide", () => {
+		for (const url of applicationFilePreviewUrls) URL.revokeObjectURL(url);
+	});
+
+	applicationFinish.addEventListener("click", (event) => {
+		const invalidField = [...applicationEducationStep.querySelectorAll("input, select")]
+			.find((field) => !field.checkValidity());
+		if (!invalidField) return;
+
+		event.preventDefault();
+		invalidField.reportValidity();
 		const isSwahili = languageSelect.value === "sw";
-		applicationStatus.textContent = isSwahili ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+		applicationStatus.textContent = isSwahili
+			? swahiliTranslations["Complete the education details and attach at least one school document before finishing."]
+			: "Complete the education details and attach at least one school document before finishing.";
+		applicationStatus.focus();
+	});
+
+	applicationForm.addEventListener("submit", async (event) => {
+		event.preventDefault();
+		const client = await supabaseClientReady;
+		const language = languageSelect.value === "sw" ? "sw" : "en";
+		if (!client) {
+			applicationStatus.textContent = applicationSubmitMessages[language].unavailable;
+			applicationStatus.focus();
+			return;
+		}
+
+		applicationFinish.disabled = true;
+		applicationStatus.textContent = applicationSubmitMessages[language].pending;
+		const controller = new AbortController();
+		const timeout = window.setTimeout(() => controller.abort(), 60000);
+		try {
+			const response = await fetch(`${window.FALCOMP_SUPABASE_URL}/functions/v1/application-submit`, {
+				method: "POST",
+				headers: {
+					apikey: supabaseAnonKey,
+					Authorization: `Bearer ${supabaseAnonKey}`
+				},
+				body: new FormData(applicationForm),
+				signal: controller.signal
+			});
+			const result = await response.json().catch(() => null);
+			if (!response.ok || !result?.application_id) throw new Error("Application submission failed");
+
+			applicationSubmitted = true;
+			applicationReference = result.application_id;
+			applicationForm.hidden = true;
+			const confirmation = language === "sw" ? swahiliTranslations[applicationConfirmation] : applicationConfirmation;
+			const referenceLabel = language === "sw" ? "Nambari ya rejea" : "Reference";
+			applicationStatus.textContent = `${confirmation} ${referenceLabel}: ${applicationReference}`;
+		} catch {
+			applicationStatus.textContent = applicationSubmitMessages[language].failed;
+		} finally {
+			window.clearTimeout(timeout);
+			applicationFinish.disabled = false;
+			applicationStatus.focus();
+		}
 	});
 }
 

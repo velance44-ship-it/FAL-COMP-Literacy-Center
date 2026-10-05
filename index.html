@@ -8,10 +8,8 @@
     <title>FAL-COMP Literacy Center | Skills for what's next</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="script.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -62,19 +60,20 @@
             <h2 id="profile-title">Your learning,<br><em>in one place.</em></h2>
             <p class="profile-intro">Sign in to see your student profile.</p>
             <form class="profile-form" id="profile-form">
-                <label for="profile-student-id">Student ID (numbers only)</label>
-                <input id="profile-student-id" name="studentId" type="text" inputmode="numeric" pattern="[0-9]+" autocomplete="username" placeholder="Enter your student ID" required>
+                <label for="profile-email">Email address</label>
+                <input id="profile-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
                 <label for="profile-password">Password</label>
                 <input id="profile-password" name="password" type="password" autocomplete="current-password" required>
-                <button class="button button-green" type="submit">Continue to demo profile <span aria-hidden="true">↗</span></button>
+                <button class="button button-green" type="submit">Sign in <span aria-hidden="true">↗</span></button>
             </form>
-            <p class="profile-demo-note">Preview only: this form does not verify passwords or access student records. Secure authentication must be connected before launch.</p>
+            <p class="profile-form-status" id="profile-form-status" role="status" aria-live="polite" hidden></p>
+            <p class="profile-demo-note">Sign in with the email and password connected to your student account.</p>
         </div>
         <div class="profile-account-view" id="profile-account-view" hidden>
-            <p class="eyebrow eyebrow-dark"><span></span> Student profile preview</p>
+            <p class="eyebrow eyebrow-dark"><span></span> Student account</p>
             <h2 id="profile-title-signed-in">Welcome,<br><em id="profile-name">student.</em></h2>
             <p class="profile-email" id="profile-account-id"></p>
-            <div class="profile-status"><span aria-hidden="true">✳</span><div><strong>Profile preview</strong><p>Course enrollments will appear here when student accounts are connected.</p></div></div>
+            <div class="profile-status"><span aria-hidden="true">✳</span><div><strong>Account connected</strong><p>Your course enrollments will appear here when available.</p></div></div>
             <div class="profile-actions">
                 <a class="button button-green" href="courses.html" id="profile-courses-link">View courses <span aria-hidden="true">↗</span></a>
                 <button class="profile-signout" id="profile-signout" type="button">Sign out</button>
@@ -130,5 +129,6 @@
         <p>Practical skills. Brighter possibilities.</p>
         <span class="copyright">© <span id="year"></span> FAL-COMP Literacy Center</span>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>

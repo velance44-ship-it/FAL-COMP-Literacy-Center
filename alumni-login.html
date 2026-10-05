@@ -8,14 +8,13 @@
     <title>Alumni Sign In | FAL-COMP Literacy Center</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body data-page="alumni-login">
     <header class="site-header">
         <a class="brand" href="index.html" aria-label="FAL-COMP Literacy Center home">
-            <span class="brand-mark" aria-hidden="true">F</span>
+            <span class="brand-mark" aria-hidden="true"><img src="Project%20logo.jpeg" alt=""></span>
             <span class="brand-name">FAL-COMP <small>Literacy Center</small></span>
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span></button>
@@ -64,9 +63,10 @@
     </main>
 
     <footer class="site-footer">
-        <a class="brand brand-footer" href="index.html"><span class="brand-mark" aria-hidden="true">F</span><span class="brand-name">FAL-COMP <small>Literacy Center</small></span></a>
+        <a class="brand brand-footer" href="index.html"><span class="brand-mark" aria-hidden="true"><img src="Project%20logo.jpeg" alt=""></span><span class="brand-name">FAL-COMP <small>Literacy Center</small></span></a>
         <p>Practical skills. Brighter possibilities.</p>
         <span class="copyright">© <span id="year"></span> FAL-COMP Literacy Center</span>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>
