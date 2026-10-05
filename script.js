@@ -45,6 +45,7 @@ const alumniProfileName = document.querySelector("#alumni-profile-name");
 const alumniAccountEmail = document.querySelector("#alumni-account-email");
 const alumniSignout = document.querySelector("#alumni-signout");
 const applicationForm = document.querySelector("#application-form");
+const applicationCourse = document.querySelector("#applicant-course");
 const applicationStatus = document.querySelector("#application-status");
 const applicationNext = document.querySelector("#application-next");
 const applicationBack = document.querySelector("#application-back");
@@ -242,7 +243,7 @@ const interfaceLabels = {
 		closeProfile: "Close profile",
 		openNavigation: "Open navigation",
 		closeNavigation: "Close navigation",
-		enquire: "Enquire about",
+		enquire: "Apply for",
 		courses: ["Computer basics", "Programming languages", "Graphic design", "Microsoft suite", "Digital skills"]
 	},
 	sw: {
@@ -265,7 +266,7 @@ const interfaceLabels = {
 		closeProfile: "Funga wasifu",
 		openNavigation: "Fungua menyu ya urambazaji",
 		closeNavigation: "Funga menyu ya urambazaji",
-		enquire: "Ulizia kuhusu",
+		enquire: "Omba kozi ya",
 		courses: ["Misingi ya kompyuta", "Lugha za programu", "Ubunifu wa picha", "Vifurushi vya Microsoft", "Ujuzi wa kidijitali"]
 	}
 };
@@ -537,6 +538,11 @@ if (alumniLoginForm) {
 }
 
 if (applicationForm) {
+	const requestedCourse = new URLSearchParams(window.location.search).get("course");
+	if (requestedCourse && [...applicationCourse.options].some((option) => option.value === requestedCourse)) {
+		applicationCourse.value = requestedCourse;
+	}
+
 	applicationNext.addEventListener("click", () => {
 		for (const field of applicationContactStep.querySelectorAll("input, select")) {
 			if (!field.reportValidity()) return;
